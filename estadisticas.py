@@ -1,14 +1,12 @@
 """
 Fichero: estadisticas.py
-Este módulo se encarga de gestionar todas las estadísticas del juego.
-Aquí se inicializan, se actualizan durante la partida y se muestran
-al finalizar el juego.
+Este fichero se encarga de la gestion de estadisitcas del juego, actualizandolas y mostrandolas al final de la partida
 """
 
 def inicializar_estadisticas():
     """
     Inicializa y devuelve un diccionario con todas las estadísticas
-    necesarias para una partida.
+    para la partida
     """
     return {
         "rondas": 0,
@@ -24,10 +22,10 @@ def actualizar_estadisticas(estadisticas, acierto, tiempo_respuesta, longitud_se
     """
     Actualiza las estadísticas después de cada ronda.
 
-    - estadisticas: diccionario con las estadísticas actuales
-    - acierto: booleano que indica si el jugador acertó la ronda
-    - tiempo_respuesta: tiempo que tardó el jugador en responder
-    - longitud_secuencia: longitud actual de la secuencia
+    estadisticas: diccionario con las estadísticas actuales
+    acierto: booleano que indica si el jugador acertó la ronda
+    tiempo_respuesta: tiempo que tardó el jugador en responder
+    longitud_secuencia: longitud actual de la secuencia
     """
     estadisticas["rondas"] += 1
     estadisticas["intentos"] += 1
@@ -44,7 +42,7 @@ def actualizar_estadisticas(estadisticas, acierto, tiempo_respuesta, longitud_se
 
 def calcular_precision(estadisticas):
     """
-    Calcula y devuelve la precisión del jugador en porcentaje.
+    Devuelve la precision de aciertos
     """
     if estadisticas["intentos"] == 0:
         return 0
@@ -54,7 +52,7 @@ def calcular_precision(estadisticas):
 
 def calcular_tiempo_medio(estadisticas):
     """
-    Calcula el tiempo medio de respuesta del jugador.
+    Develve la media del tiempo de respuesta
     """
     if len(estadisticas["tiempos_respuesta"]) == 0:
         return 0
@@ -64,7 +62,7 @@ def calcular_tiempo_medio(estadisticas):
 
 def mostrar_resumen(estadisticas, modo, dificultad):
     """
-    Muestra por pantalla un resumen final de la partida.
+    Muestra un resumen de los datos al final de la partida
     """
     precision = calcular_precision(estadisticas)
     tiempo_medio = calcular_tiempo_medio(estadisticas)

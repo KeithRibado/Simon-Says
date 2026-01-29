@@ -1,8 +1,6 @@
 """
 Fichero: motor_juego.py
-Este módulo contiene toda la lógica principal del juego Simon Says.
-Aquí se genera la secuencia, se muestra al jugador, se recoge su
-respuesta y se comprueba si es correcta según el modo de juego.
+Este fichero contiene toda la lógica principal del juego Simon Says
 """
 
 import random
@@ -38,15 +36,14 @@ def mostrar_secuencia(secuencia, velocidad):
         print(elemento)
         time.sleep(velocidad)
 
-    # Limpiamos un poco la pantalla separando con saltos de línea
+    # Separamos con saltos de linea para mayor limpieza
     print("\n" * 100)
 
 
 def pedir_secuencia_usuario(longitud, tiempo_max):
     """
-    Pide al usuario que introduzca la secuencia completa.
-    La secuencia debe introducirse sin espacios (por ejemplo: ABC).
-    Se controla el tiempo total de respuesta.
+    Pide al usuario que introduzca la secuencia completa
+    La secuencia debe introducirse sin espacios (por ejemplo: ABC)
     """
     print("Introduce la secuencia SIN espacios (ejemplo: ABC)")
 
@@ -76,13 +73,13 @@ def pedir_secuencia_usuario(longitud, tiempo_max):
 
 def comprobar_secuencia(secuencia_correcta, secuencia_usuario, modo):
     """
-    Comprueba si la secuencia introducida por el usuario es correcta.
+    Se comprueba si la secuencia introducida por el usuario es correcta.
     """
     if modo == "inverso":
-        # En modo inverso comparamos con la secuencia al revés
+        # En modo inverso se compara al reves
         return secuencia_usuario == list(reversed(secuencia_correcta))
 
-    # En el resto de modos la comparación es normal
+    # La comparacion es normal para el resto 
     return secuencia_usuario == secuencia_correcta
 
 
@@ -102,7 +99,7 @@ def gestionar_vidas(vidas, acierto):
 def jugar_ronda(secuencia, modo, dificultad, elementos, vidas):
     """
     Ejecuta una ronda completa del juego.
-    Devuelve si el jugador acertó, el tiempo de respuesta y las vidas restantes.
+    Si el jugador acertó, devuelve el tiempo de respuesta y las vidas restantes.
     """
     secuencia = generar_secuencia(secuencia, modo, dificultad, elementos)
     mostrar_secuencia(secuencia, dificultad["velocidad_mostrar"])
