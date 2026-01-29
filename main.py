@@ -23,18 +23,16 @@ def main(): # funcion que controla la ejecucion del jeugo
     dificultad = seleccionar_dificultad()
 
     #variables principales inicializadas
-    secuencia = []          # Secuencia que el jugador debe memorizar
-    vidas = 3               # El jugador empieza con 3 vidas
-    ronda_actual = 0        # Contador de rondas
+    secuencia = [] # Secuencia que el jugador debe memorizar
+    vidas = 3 # El jugador empieza con 3 vidas
+    ronda_actual = 0 # Contador de rondas
     estadisticas = inicializar_estadisticas()
-
+#mostramos mensajes a usuario 
     print("\nComienza la partida")
     print(f"Modo seleccionado: {modo_juego}")
     print(f"Dificultad seleccionada: {dificultad['nombre']}")
 
-    # Como el juego terminará solo cuando el jugador pierde***********************
-    # Bucle principal del juego
-    # El juego solo termina cuando el jugador pierde todas las vidas
+    # Como el juego terminará solo cuando el jugador pierde codificamos un buble principal
     while vidas > 0:
         ronda_actual += 1
         print(f"\n--- RONDA {ronda_actual} ---")
