@@ -1,6 +1,7 @@
 """
 Fichero: estadisticas.py
-Este fichero se encarga de la gestion de estadisitcas del juego, actualizandolas y mostrandolas al final de la partida
+Este fichero se encarga de la gestion de estadisticas del juego,
+actualizandolas y mostrandolas al final de la partida
 """
 
 def inicializar_estadisticas():
@@ -14,18 +15,24 @@ def inicializar_estadisticas():
         "aciertos": 0,
         "errores": 0,
         "secuencia_maxima": 0,
-        "tiempos_respuesta": []
+        "tiempos_respuesta": [],
+        "puntuacion_total": 0
     }
+
+
+def sumar_puntos(estadisticas, longitud, tiempo_respuesta, tiempo_limite):
+    """
+    Suma puntos a la puntuación total en función de la
+    longitud de la secuencia y el tiempo de respuesta
+    """
+    puntos_base = longitud * 100
+    bonus = max(0, int((tiempo_limite - tiempo_respuesta) * 10))
+    estadisticas["puntuacion_total"] += puntos_base + bonus
 
 
 def actualizar_estadisticas(estadisticas, acierto, tiempo_respuesta, longitud_secuencia):
     """
-    Actualiza las estadísticas después de cada ronda.
-
-    estadisticas: diccionario con las estadísticas actuales
-    acierto: booleano que indica si el jugador acertó la ronda
-    tiempo_respuesta: tiempo que tardó el jugador en responder
-    longitud_secuencia: longitud actual de la secuencia
+    Actualiza las estadísticas después de cada ronda
     """
     estadisticas["rondas"] += 1
     estadisticas["intentos"] += 1
@@ -33,7 +40,6 @@ def actualizar_estadisticas(estadisticas, acierto, tiempo_respuesta, longitud_se
 
     if acierto:
         estadisticas["aciertos"] += 1
-        # Guardamos la secuencia más larga alcanzada
         if longitud_secuencia > estadisticas["secuencia_maxima"]:
             estadisticas["secuencia_maxima"] = longitud_secuencia
     else:
@@ -42,21 +48,19 @@ def actualizar_estadisticas(estadisticas, acierto, tiempo_respuesta, longitud_se
 
 def calcular_precision(estadisticas):
     """
-    Devuelve la precision de aciertos
+    Devuelve la precisión de aciertos
     """
     if estadisticas["intentos"] == 0:
         return 0
-
     return (estadisticas["aciertos"] / estadisticas["intentos"]) * 100
 
 
 def calcular_tiempo_medio(estadisticas):
     """
-    Develve la media del tiempo de respuesta
+    Devuelve la media del tiempo de respuesta
     """
     if len(estadisticas["tiempos_respuesta"]) == 0:
         return 0
-
     return sum(estadisticas["tiempos_respuesta"]) / len(estadisticas["tiempos_respuesta"])
 
 
@@ -76,3 +80,4 @@ def mostrar_resumen(estadisticas, modo, dificultad):
     print(f"Errores: {estadisticas['errores']}")
     print(f"Precisión: {precision:.2f}%")
     print(f"Tiempo medio de respuesta: {tiempo_medio:.2f} segundos")
+    print(f"Puntuación total: {estadisticas['puntuacion_total']}")

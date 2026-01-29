@@ -1,59 +1,58 @@
 """
 Primer archivo que se encargará de controlar todo el flujo del juego
-tambien controlara las dificultades y als estadisticas
+tambien controlara las dificultades y las estadisticas
 """
 
 # Importamos las funciones de los distintos módulos del proyecto
 from configuracion import seleccionar_modo, seleccionar_dificultad
 from motor_juego import jugar_ronda
-from estadisticas import inicializar_estadisticas, actualizar_estadisticas, mostrar_resumen
+from estadisticas import (
+    inicializar_estadisticas,
+    actualizar_estadisticas,
+    mostrar_resumen,
+    sumar_puntos
+)
 
-# Definimos los elementos base del juego en una tupla para cumplir con los requisitos
+# Definimos los elementos base del juego
 ELEMENTOS_JUEGO = ['A', 'B', 'C', 'D', 'E', 'F']
 
 
-def main(): # funcion que controla la ejecucion del jeugo
-   
+def main():
+
     print("************************************")
-    print(" BIENVENIDO Al JUeGO DE SIMON SAYS  ")
+    print(" BIENVENIDO AL JUEGO DE SIMON SAYS ")
     print("************************************")
 
-    # variables que seleccionan el modo de juego y dificultad
+    # Selección de modo y dificultad
     modo_juego = seleccionar_modo()
     dificultad = seleccionar_dificultad()
 
-    #variables principales inicializadas
-    secuencia = [] # Secuencia que el jugador debe memorizar
-    vidas = 3 # El jugador empieza con 3 vidas
-    ronda_actual = 0 # Contador de rondas
+    # Variables principales
+    secuencia = []
+    vidas = 3
+    ronda_actual = 0
     estadisticas = inicializar_estadisticas()
-#mostramos mensajes a usuario 
+
     print("\nComienza la partida")
     print(f"Modo seleccionado: {modo_juego}")
     print(f"Dificultad seleccionada: {dificultad['nombre']}")
 
-    # Como el juego terminará solo cuando el jugador pierde codificamos un buble principal
     while vidas > 0:
         ronda_actual += 1
         print(f"\n*** RONDA {ronda_actual} ***")
 
-        # Calculamos el tiempo disponible para esta ronda
-        # En modo velocidad el tiempo se reduce progresivamente
+        # Cálculo del tiempo por ronda
         if modo_juego == "velocidad":
             tiempo_ronda = dificultad["tiempo_respuesta"] - (ronda_actual - 1) * 0.2
-
-            # Establecemos un tiempo mínimo para evitar valores negativos o imposibles
             if tiempo_ronda < 2:
                 tiempo_ronda = 2
         else:
-            # En el resto de modos el tiempo permanece constante
             tiempo_ronda = dificultad["tiempo_respuesta"]
 
-        # Creamos una copia de la dificultad para no modificar la original
         dificultad_ronda = dificultad.copy()
         dificultad_ronda["tiempo_respuesta"] = tiempo_ronda
 
-        # Ejecutamos una ronda completa del juego
+        # Ejecutamos la ronda
         acierto, tiempo_respuesta, vidas, longitud_secuencia = jugar_ronda(
             secuencia,
             modo_juego,
@@ -62,7 +61,7 @@ def main(): # funcion que controla la ejecucion del jeugo
             vidas
         )
 
-        # Actualizamos las estadísticas con los datos de la ronda
+        # Actualizamos estadísticas básicas
         actualizar_estadisticas(
             estadisticas,
             acierto,
@@ -70,24 +69,28 @@ def main(): # funcion que controla la ejecucion del jeugo
             longitud_secuencia
         )
 
-        # mpstramos mensajes al jugador si acierta o no
+        # Suma de puntos si acierta
         if acierto:
+            sumar_puntos(
+                estadisticas,
+                longitud_secuencia,
+                tiempo_respuesta,
+                dificultad_ronda["tiempo_respuesta"]
+            )
             print("Has superado la ronda.")
         else:
             print("No has superado la ronda.")
 
         print(f"Vidas restantes: {vidas}")
 
-        # Pausa para que el jugador pueda leer el resultado antes de la siguiente ronda
         import time
         time.sleep(2)
 
-        # Si no quedan vidas, se termina el juego
         if vidas <= 0:
             print("\nHas perdido todas las vidas.")
             break
 
-    # Al finalizar el juego se muestra el resumen de la partida
+    # Resumen final
     mostrar_resumen(
         estadisticas,
         modo_juego,
@@ -95,6 +98,5 @@ def main(): # funcion que controla la ejecucion del jeugo
     )
 
 
-# Punto de entrada del programa
 if __name__ == "__main__":
     main()
