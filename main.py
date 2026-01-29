@@ -3,7 +3,6 @@ Primer archivo que se encargará de controlar todo el flujo del juego
 tambien controlara las dificultades y las estadisticas
 """
 
-# Importamos las funciones de los distintos módulos del proyecto
 from configuracion import seleccionar_modo, seleccionar_dificultad
 from motor_juego import jugar_ronda
 from estadisticas import (
@@ -13,7 +12,6 @@ from estadisticas import (
     sumar_puntos
 )
 
-# Definimos los elementos base del juego
 ELEMENTOS_JUEGO = ['A', 'B', 'C', 'D', 'E', 'F']
 
 
@@ -23,11 +21,9 @@ def main():
     print(" BIENVENIDO AL JUEGO DE SIMON SAYS ")
     print("************************************")
 
-    # Selección de modo y dificultad
     modo_juego = seleccionar_modo()
     dificultad = seleccionar_dificultad()
 
-    # Variables principales
     secuencia = []
     vidas = 3
     ronda_actual = 0
@@ -41,7 +37,6 @@ def main():
         ronda_actual += 1
         print(f"\n*** RONDA {ronda_actual} ***")
 
-        # Cálculo del tiempo por ronda
         if modo_juego == "velocidad":
             tiempo_ronda = dificultad["tiempo_respuesta"] - (ronda_actual - 1) * 0.2
             if tiempo_ronda < 2:
@@ -52,7 +47,6 @@ def main():
         dificultad_ronda = dificultad.copy()
         dificultad_ronda["tiempo_respuesta"] = tiempo_ronda
 
-        # Ejecutamos la ronda
         acierto, tiempo_respuesta, vidas, longitud_secuencia = jugar_ronda(
             secuencia,
             modo_juego,
@@ -61,7 +55,6 @@ def main():
             vidas
         )
 
-        # Actualizamos estadísticas básicas
         actualizar_estadisticas(
             estadisticas,
             acierto,
@@ -69,7 +62,6 @@ def main():
             longitud_secuencia
         )
 
-        # Suma de puntos si acierta
         if acierto:
             sumar_puntos(
                 estadisticas,
@@ -90,7 +82,6 @@ def main():
             print("\nHas perdido todas las vidas.")
             break
 
-    # Resumen final
     mostrar_resumen(
         estadisticas,
         modo_juego,
