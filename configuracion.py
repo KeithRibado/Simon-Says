@@ -1,21 +1,17 @@
 """
-Fichero: configuracion.py
-Este fichero contiene las funciones relacionadas con la configuración
-inicial del juego: selección del modo de juego y nivel de dificultad.
-"""
+archivo que se encarga de las funciones que controlan la selecion de modo de juego y la dificultad
 
+"""
+#Funcion que mostrara el menu con los modos de juego
 def seleccionar_modo():
-    """
-    Muestra un menú con los distintos modos de juego y devuelve
-    el modo seleccionado por el usuario.
-    """
-    while True:
+    
+    while True: #imprimimos los modos de juego que manejaremos
         print("\nSelecciona el modo de juego:")
         print("1. Clásico")
         print("2. Velocidad")
         print("3. Inverso")
         print("4. Caos")
-
+#controlamos con una excepcion lo que el jugador pueda introducir y que no haya fallos en nuestro bucle
         try:
             opcion = int(input("Introduce una opción (1-4): "))
 
@@ -33,18 +29,16 @@ def seleccionar_modo():
         except ValueError:
             print("Error: debes introducir un número.")
 
-
+#
 def seleccionar_dificultad():
-    """
-    Permite seleccionar el nivel de dificultad del juego y devuelve
-    un diccionario con los parámetros asociados a dicha dificultad.
-    """
+
+    #Con el bucle mostramos el menu de de opciones
     while True:
         print("\nSelecciona la dificultad:")
         print("1. Fácil")
         print("2. Media")
         print("3. Difícil")
-
+#Para el bloque try usamos un diccionario que tome la clave y valor seleccionado
         try:
             opcion = int(input("Introduce una opción (1-3): "))
 
@@ -74,6 +68,6 @@ def seleccionar_dificultad():
 
             else:
                 print("Opción no válida. Debe ser un número del 1 al 3.")
-
+#controlamos errores con una excepcion para que solo se pueda introducir los numero entre 1 y 3
         except ValueError:
             print("Error: debes introducir un número.")

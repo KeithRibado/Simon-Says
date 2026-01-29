@@ -35,7 +35,7 @@ def main(): # funcion que controla la ejecucion del jeugo
     # Como el juego terminará solo cuando el jugador pierde codificamos un buble principal
     while vidas > 0:
         ronda_actual += 1
-        print(f"\n--- RONDA {ronda_actual} ---")
+        print(f"\n*** RONDA {ronda_actual} ***")
 
         # Calculamos el tiempo disponible para esta ronda
         # En modo velocidad el tiempo se reduce progresivamente
@@ -70,7 +70,7 @@ def main(): # funcion que controla la ejecucion del jeugo
             longitud_secuencia
         )
 
-        # Mensajes informativos para el jugador
+        # mpstramos mensajes al jugador si acierta o no
         if acierto:
             print("Has superado la ronda.")
         else:
