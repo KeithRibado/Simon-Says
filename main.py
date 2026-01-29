@@ -9,10 +9,10 @@ from motor_juego import jugar_ronda
 from estadisticas import inicializar_estadisticas, actualizar_estadisticas, mostrar_resumen
 import time
 
-# Definimos los elementos base del juego (el enunciado acepta lista o tupla)
+# Definimos los elementos base del juego
 ELEMENTOS_JUEGO = ['A', 'B', 'C', 'D', 'E', 'F']
 
-TIEMPO_MINIMO = 2  # para que en modo velocidad no llegue a tiempos imposibles
+TIEMPO_MINIMO = 2  #para que en modo velocidad no llegue a tiempos imposibles
 
 
 def calcular_tiempo_ronda(modo_juego, dificultad, ronda_actual):
@@ -117,18 +117,18 @@ def main():  # funcion que controla la ejecucion del juego
             modo_juego,
             dificultad["nombre"]
         )
-
+#si el jugador llega a interrumpir la partida con el teclado, haremos uso de una excepcion del sistema keyboardinterrupt para que salga sin dar errores 
     except KeyboardInterrupt:
-        # Interrupción del sistema (Ctrl+C). Esto encaja con UT05.
+        # Interrupción del sistema (Ctrl+C). 
         print("\n\nPartida interrumpida por el usuario. Saliendo...")
 
-    except (ValueError, TypeError, KeyError) as e:
+    except (ValueError, TypeError, KeyError) as errores:
         # Errores controlados típicos
-        print(f"\nError controlado: {e}")
+        print(f"\nError controlado: {errores}")
 
     except Exception as e:
-        # Último recurso
-        print(f"\nError inesperado: {e}")
+        # como ultimo recurso
+        print(f"\nError inesperado: {errores}")
 
 
 # Punto de entrada del programa
