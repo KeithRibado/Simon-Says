@@ -9,7 +9,7 @@ from motor_juego import jugar_ronda
 from estadisticas import inicializar_estadisticas, actualizar_estadisticas, mostrar_resumen
 import time
 
-# Definimos los elementos base del juego
+# Definimos los elementos base del juego en una lista
 ELEMENTOS_JUEGO = ['A', 'B', 'C', 'D', 'E', 'F']
 
 TIEMPO_MINIMO = 2  #para que en modo velocidad no llegue a tiempos imposibles
@@ -32,7 +32,7 @@ def calcular_tiempo_ronda(modo_juego, dificultad, ronda_actual):
         # En el resto de modos el tiempo permanece constante
         tiempo_ronda = tiempo_base
 
-    # Redondeamos para que no salgan decimales raros tipo 2.199999999
+    # Redondeamos para que no salgan decimales que no deseamos (ejemplo 2.1999)
     return round(tiempo_ronda, 2)
 
 
@@ -47,7 +47,7 @@ def main():  # funcion que controla la ejecucion del juego
         modo_juego = seleccionar_modo()
         dificultad = seleccionar_dificultad()
 
-        # Validación básica (robustez): comprobamos que dificultad tenga lo importante
+        # validación que nos permite comprobar que dificultad se escoge 
         if not isinstance(dificultad, dict) or "nombre" not in dificultad or "tiempo_respuesta" not in dificultad:
             raise ValueError("La dificultad no tiene el formato esperado (faltan claves).")
 
@@ -57,7 +57,7 @@ def main():  # funcion que controla la ejecucion del juego
         ronda_actual = 0  # Contador de rondas
         estadisticas = inicializar_estadisticas()
 
-        # mostramos mensajes a usuario
+        # mostramos mensajes al jugador
         print("\nComienza la partida")
         print(f"Modo seleccionado: {modo_juego}")
         print(f"Dificultad seleccionada: {dificultad['nombre']}")
@@ -83,7 +83,7 @@ def main():  # funcion que controla la ejecucion del juego
                 vidas
             )
 
-            # Robustez: comprobamos que jugar_ronda devuelve lo esperado
+            # comprobamos que jugar_ronda devuelve lo esperado
             if not isinstance(resultado, tuple) or len(resultado) != 4:
                 raise TypeError("jugar_ronda debe devolver 4 valores: (acierto, tiempo_respuesta, vidas, longitud).")
 
@@ -111,7 +111,7 @@ def main():  # funcion que controla la ejecucion del juego
         # Si sale del bucle es que ya no quedan vidas
         print("\nHas perdido todas las vidas.")
 
-        # Al finalizar el juego se muestra el resumen de la partida
+        #al finalizar el juego se muestra el resumen de la partida
         mostrar_resumen(
             estadisticas,
             modo_juego,
