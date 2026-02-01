@@ -1,136 +1,93 @@
 """
-Primer archivo que se encargará de controlar todo el flujo del juego.
-También controlará las dificultades y las estadísticas.
+Primer archivo que se encargará de controlar todo el flujo del juego
+tambien controlara las dificultades y las estadisticas
 """
 
-# Importamos las funciones de los distintos módulos del proyecto
 from configuracion import seleccionar_modo, seleccionar_dificultad
 from motor_juego import jugar_ronda
-from estadisticas import inicializar_estadisticas, actualizar_estadisticas, mostrar_resumen
-import time
+from estadisticas import (
+    inicializar_estadisticas,
+    actualizar_estadisticas,
+    mostrar_resumen,
+    sumar_puntos
+)
 
-# Definimos los elementos base del juego en una lista
 ELEMENTOS_JUEGO = ['A', 'B', 'C', 'D', 'E', 'F']
 
-TIEMPO_MINIMO = 2  #para que en modo velocidad no llegue a tiempos imposibles
 
-
-def calcular_tiempo_ronda(modo_juego, dificultad, ronda_actual):
-    """
-    Calcula el tiempo disponible para esta ronda.
-    En modo velocidad baja un poco cada ronda.
-    """
-    tiempo_base = dificultad["tiempo_respuesta"]
-
-    if modo_juego == "velocidad":
-        tiempo_ronda = tiempo_base - (ronda_actual - 1) * 0.2
-
-        # Establecemos un tiempo mínimo para evitar valores negativos o imposibles
-        if tiempo_ronda < TIEMPO_MINIMO:
-            tiempo_ronda = TIEMPO_MINIMO
-    else:
-        # En el resto de modos el tiempo permanece constante
-        tiempo_ronda = tiempo_base
-
-    # Redondeamos para que no salgan decimales que no deseamos (ejemplo 2.1999)
-    return round(tiempo_ronda, 2)
-
-
-def main():  # funcion que controla la ejecucion del juego
+def main():
 
     print("************************************")
-    print("  BIENVENIDO AL JUEGO DE SIMON SAYS  ")
+    print(" BIENVENIDO AL JUEGO DE SIMON SAYS ")
     print("************************************")
 
-    try:
-        # variables que seleccionan el modo de juego y dificultad
-        modo_juego = seleccionar_modo()
-        dificultad = seleccionar_dificultad()
+    modo_juego = seleccionar_modo()
+    dificultad = seleccionar_dificultad()
 
-        # validación que nos permite comprobar que dificultad se escoge 
-        if not isinstance(dificultad, dict) or "nombre" not in dificultad or "tiempo_respuesta" not in dificultad:
-            raise ValueError("La dificultad no tiene el formato esperado (faltan claves).")
+    secuencia = []
+    vidas = 3
+    ronda_actual = 0
+    estadisticas = inicializar_estadisticas()
 
-        # variables principales inicializadas
-        secuencia = []  # Secuencia que el jugador debe memorizar
-        vidas = 3  # El jugador empieza con 3 vidas
-        ronda_actual = 0  # Contador de rondas
-        estadisticas = inicializar_estadisticas()
+    print("\nComienza la partida")
+    print(f"Modo seleccionado: {modo_juego}")
+    print(f"Dificultad seleccionada: {dificultad['nombre']}")
 
-        # mostramos mensajes al jugador
-        print("\nComienza la partida")
-        print(f"Modo seleccionado: {modo_juego}")
-        print(f"Dificultad seleccionada: {dificultad['nombre']}")
+    while vidas > 0:
+        ronda_actual += 1
+        print(f"\n*** RONDA {ronda_actual} ***")
 
-        # Como el juego terminará solo cuando el jugador pierde, codificamos un bucle principal
-        while vidas > 0:
-            ronda_actual += 1
-            print(f"\n*** RONDA {ronda_actual} ***")
+        if modo_juego == "velocidad":
+            tiempo_ronda = dificultad["tiempo_respuesta"] - (ronda_actual - 1) * 0.2
+            if tiempo_ronda < 2:
+                tiempo_ronda = 2
+        else:
+            tiempo_ronda = dificultad["tiempo_respuesta"]
 
-            # Calculamos el tiempo disponible para esta ronda
-            tiempo_ronda = calcular_tiempo_ronda(modo_juego, dificultad, ronda_actual)
+        dificultad_ronda = dificultad.copy()
+        dificultad_ronda["tiempo_respuesta"] = tiempo_ronda
 
-            # Creamos una copia de la dificultad para no modificar la original
-            dificultad_ronda = dificultad.copy()
-            dificultad_ronda["tiempo_respuesta"] = tiempo_ronda
-
-            # Ejecutamos una ronda completa del juego
-            resultado = jugar_ronda(
-                secuencia,
-                modo_juego,
-                dificultad_ronda,
-                ELEMENTOS_JUEGO,
-                vidas
-            )
-
-            # comprobamos que jugar_ronda devuelve lo esperado
-            if not isinstance(resultado, tuple) or len(resultado) != 4:
-                raise TypeError("jugar_ronda debe devolver 4 valores: (acierto, tiempo_respuesta, vidas, longitud).")
-
-            acierto, tiempo_respuesta, vidas, longitud_secuencia = resultado
-
-            # Actualizamos las estadísticas con los datos de la ronda
-            actualizar_estadisticas(
-                estadisticas,
-                acierto,
-                tiempo_respuesta,
-                longitud_secuencia
-            )
-
-            # mostramos mensajes al jugador si acierta o no
-            if acierto:
-                print("Has superado la ronda.")
-            else:
-                print("No has superado la ronda.")
-
-            print(f"Vidas restantes: {vidas}")
-
-            # Pausa para que el jugador pueda leer el resultado antes de la siguiente ronda
-            time.sleep(2)
-
-        # Si sale del bucle es que ya no quedan vidas
-        print("\nHas perdido todas las vidas.")
-
-        #al finalizar el juego se muestra el resumen de la partida
-        mostrar_resumen(
-            estadisticas,
+        acierto, tiempo_respuesta, vidas, longitud_secuencia = jugar_ronda(
+            secuencia,
             modo_juego,
-            dificultad["nombre"]
+            dificultad_ronda,
+            ELEMENTOS_JUEGO,
+            vidas
         )
-#si el jugador llega a interrumpir la partida con el teclado, haremos uso de una excepcion del sistema keyboardinterrupt para que salga sin dar errores 
-    except KeyboardInterrupt:
-        # Interrupción del sistema (Ctrl+C). 
-        print("\n\nPartida interrumpida por el usuario. Saliendo...")
 
-    except (ValueError, TypeError, KeyError) as errores:
-        # Errores controlados típicos
-        print(f"\nError controlado: {errores}")
+        actualizar_estadisticas(
+            estadisticas,
+            acierto,
+            tiempo_respuesta,
+            longitud_secuencia
+        )
 
-    except Exception as e:
-        # como ultimo recurso
-        print(f"\nError inesperado: {errores}")
+        if acierto:
+            sumar_puntos(
+                estadisticas,
+                longitud_secuencia,
+                tiempo_respuesta,
+                dificultad_ronda["tiempo_respuesta"]
+            )
+            print("Has superado la ronda.")
+        else:
+            print("No has superado la ronda.")
+
+        print(f"Vidas restantes: {vidas}")
+
+        import time
+        time.sleep(2)
+
+        if vidas <= 0:
+            print("\nHas perdido todas las vidas.")
+            break
+
+    mostrar_resumen(
+        estadisticas,
+        modo_juego,
+        dificultad["nombre"]
+    )
 
 
-# Punto de entrada del programa
 if __name__ == "__main__":
     main()
