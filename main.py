@@ -2,9 +2,10 @@
 Primer archivo que se encargará de controlar todo el flujo del juego
 tambien controlara las dificultades y las estadisticas
 """
-
+#importamos las funciones de los modulos del proyecto
 from configuracion import seleccionar_modo, seleccionar_dificultad
 from motor_juego import jugar_ronda
+import time
 from estadisticas import (
     inicializar_estadisticas,
     actualizar_estadisticas,
@@ -75,7 +76,6 @@ def main():
 
         print(f"Vidas restantes: {vidas}")
 
-        import time
         time.sleep(2)
 
         if vidas <= 0:
