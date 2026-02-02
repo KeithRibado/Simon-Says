@@ -53,7 +53,7 @@ def mostrar_secuencia(secuencia, velocidad):
         time.sleep(velocidad)
 
 # Saltos de línea para "limpiar" la pantalla
-    print("\n" * 60)
+    print("\n" * 10)
 
 
 def pedir_secuencia_usuario(longitud, tiempo_max):
